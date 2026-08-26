@@ -8,5 +8,6 @@ node_modules
 apps/website
 apps/desktop
 apps/docs
+docs
 .turbo
 .next
