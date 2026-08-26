@@ -1,0 +1,12 @@
+# Build context exclusions for the Coolify Dockerfile builds.
+# Context root is the repo root for all three services (apps/*/Dockerfile
+# all do `COPY . .` in their builder stage), so this file must live here.
+# NOTE: apps/api/.dockerignore is NOT read by Docker - .dockerignore only
+# resolves at the build-context root.
+.git
+node_modules
+apps/website
+apps/desktop
+apps/docs
+.turbo
+.next
