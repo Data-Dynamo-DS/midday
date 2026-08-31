@@ -340,7 +340,7 @@ export const transactionCategoryEmbeddings = pgTable(
   (table) => [
     index("transaction_category_embeddings_system_idx").using(
       "btree",
-      table.system.asc().nullsLast().op("bool_ops"),
+      table.system.asc().nullsLast(),
     ),
     pgPolicy("Enable read access for authenticated users", {
       as: "permissive",
@@ -413,23 +413,23 @@ export const transactions = pgTable(
   (table) => [
     index("idx_transactions_date").using(
       "btree",
-      table.date.asc().nullsLast().op("date_ops"),
+      table.date.asc().nullsLast(),
     ),
     index("idx_transactions_fts").using(
       "gin",
-      table.ftsVector.asc().nullsLast().op("tsvector_ops"),
+      table.ftsVector.asc().nullsLast(),
     ),
     index("idx_transactions_fts_vector").using(
       "gin",
-      table.ftsVector.asc().nullsLast().op("tsvector_ops"),
+      table.ftsVector.asc().nullsLast(),
     ),
     index("idx_transactions_id").using(
       "btree",
-      table.id.asc().nullsLast().op("uuid_ops"),
+      table.id.asc().nullsLast(),
     ),
     index("idx_transactions_name").using(
       "btree",
-      table.name.asc().nullsLast().op("text_ops"),
+      table.name.asc().nullsLast(),
     ),
     index("idx_transactions_merchant_name_trgm").using(
       "gin",
@@ -437,14 +437,14 @@ export const transactions = pgTable(
     ),
     index("idx_transactions_team_id_date_name").using(
       "btree",
-      table.teamId.asc().nullsLast().op("date_ops"),
-      table.date.asc().nullsLast().op("date_ops"),
-      table.name.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
+      table.date.asc().nullsLast(),
+      table.name.asc().nullsLast(),
     ),
     index("idx_transactions_team_id_name").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
-      table.name.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
+      table.name.asc().nullsLast(),
     ),
     index("idx_trgm_name").using(
       "gist",
@@ -452,35 +452,35 @@ export const transactions = pgTable(
     ),
     index("transactions_assigned_id_idx").using(
       "btree",
-      table.assignedId.asc().nullsLast().op("uuid_ops"),
+      table.assignedId.asc().nullsLast(),
     ),
     index("transactions_bank_account_id_idx").using(
       "btree",
-      table.bankAccountId.asc().nullsLast().op("uuid_ops"),
+      table.bankAccountId.asc().nullsLast(),
     ),
     index("transactions_category_slug_idx").using(
       "btree",
-      table.categorySlug.asc().nullsLast().op("text_ops"),
+      table.categorySlug.asc().nullsLast(),
     ),
     index(
       "transactions_team_id_date_currency_bank_account_id_category_idx",
     ).using(
       "btree",
-      table.teamId.asc().nullsLast().op("enum_ops"),
-      table.date.asc().nullsLast().op("date_ops"),
-      table.currency.asc().nullsLast().op("text_ops"),
-      table.bankAccountId.asc().nullsLast().op("date_ops"),
+      table.teamId.asc().nullsLast(),
+      table.date.asc().nullsLast(),
+      table.currency.asc().nullsLast(),
+      table.bankAccountId.asc().nullsLast(),
     ),
     index("transactions_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("idx_transactions_reports")
       .using(
         "btree",
-        table.teamId.asc().nullsLast().op("uuid_ops"),
-        table.date.asc().nullsLast().op("date_ops"),
-        table.categorySlug.asc().nullsLast().op("text_ops"),
+        table.teamId.asc().nullsLast(),
+        table.date.asc().nullsLast(),
+        table.categorySlug.asc().nullsLast(),
       )
       .where(sql`internal = false AND status != 'excluded'`),
     foreignKey({
@@ -554,7 +554,7 @@ export const trackerEntries = pgTable(
   (table) => [
     index("tracker_entries_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     // Composite index for insights activity date range queries
     index("tracker_entries_team_date_idx").on(table.teamId, table.date),
@@ -724,15 +724,15 @@ export const bankAccounts = pgTable(
   (table) => [
     index("bank_accounts_bank_connection_id_idx").using(
       "btree",
-      table.bankConnectionId.asc().nullsLast().op("uuid_ops"),
+      table.bankConnectionId.asc().nullsLast(),
     ),
     index("bank_accounts_created_by_idx").using(
       "btree",
-      table.createdBy.asc().nullsLast().op("uuid_ops"),
+      table.createdBy.asc().nullsLast(),
     ),
     index("bank_accounts_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.bankConnectionId],
@@ -835,11 +835,11 @@ export const invoiceRecurring = pgTable(
   (table) => [
     index("invoice_recurring_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("invoice_recurring_next_scheduled_at_idx").using(
       "btree",
-      table.nextScheduledAt.asc().nullsLast().op("timestamptz_ops"),
+      table.nextScheduledAt.asc().nullsLast(),
     ),
     index("invoice_recurring_status_idx").using(
       "btree",
@@ -849,7 +849,7 @@ export const invoiceRecurring = pgTable(
     index("invoice_recurring_active_scheduled_idx")
       .using(
         "btree",
-        table.nextScheduledAt.asc().nullsLast().op("timestamptz_ops"),
+        table.nextScheduledAt.asc().nullsLast(),
       )
       .where(sql`status = 'active'`),
     foreignKey({
@@ -959,19 +959,19 @@ export const invoices = pgTable(
   (table) => [
     index("invoices_created_at_idx").using(
       "btree",
-      table.createdAt.asc().nullsLast().op("timestamptz_ops"),
+      table.createdAt.asc().nullsLast(),
     ),
     index("invoices_fts").using(
       "gin",
-      table.fts.asc().nullsLast().op("tsvector_ops"),
+      table.fts.asc().nullsLast(),
     ),
     index("invoices_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("invoices_template_id_idx").using(
       "btree",
-      table.templateId.asc().nullsLast().op("uuid_ops"),
+      table.templateId.asc().nullsLast(),
     ),
     // Composite indexes for insights activity queries
     index("invoices_team_sent_at_idx").on(table.teamId, table.sentAt),
@@ -1007,7 +1007,7 @@ export const invoices = pgTable(
     }).onDelete("set null"),
     index("invoices_invoice_recurring_id_idx").using(
       "btree",
-      table.invoiceRecurringId.asc().nullsLast().op("uuid_ops"),
+      table.invoiceRecurringId.asc().nullsLast(),
     ),
     // Unique constraint for idempotency (prevents duplicate invoices for same sequence)
     uniqueIndex("invoices_recurring_sequence_unique_idx")
@@ -1128,7 +1128,7 @@ export const customers = pgTable(
   (table) => [
     index("customers_fts").using(
       "gin",
-      table.fts.asc().nullsLast().op("tsvector_ops"),
+      table.fts.asc().nullsLast(),
     ),
     index("idx_customers_status").on(table.status),
     index("idx_customers_is_archived").on(table.isArchived),
@@ -1164,8 +1164,8 @@ export const exchangeRates = pgTable(
   (table) => [
     index("exchange_rates_base_target_idx").using(
       "btree",
-      table.base.asc().nullsLast().op("text_ops"),
-      table.target.asc().nullsLast().op("text_ops"),
+      table.base.asc().nullsLast(),
+      table.target.asc().nullsLast(),
     ),
     unique("unique_rate").on(table.base, table.target),
     pgPolicy("Enable read access for authenticated users", {
@@ -1190,7 +1190,7 @@ export const tags = pgTable(
   (table) => [
     index("tags_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId],
@@ -1223,7 +1223,7 @@ export const trackerReports = pgTable(
   (table) => [
     index("tracker_reports_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.createdBy],
@@ -1274,13 +1274,13 @@ export const trackerProjectTags = pgTable(
   (table) => [
     index("tracker_project_tags_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("tracker_project_tags_tracker_project_id_tag_id_team_id_idx").using(
       "btree",
-      table.trackerProjectId.asc().nullsLast().op("uuid_ops"),
-      table.tagId.asc().nullsLast().op("uuid_ops"),
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.trackerProjectId.asc().nullsLast(),
+      table.tagId.asc().nullsLast(),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.tagId],
@@ -1327,7 +1327,7 @@ export const reports = pgTable(
   (table) => [
     index("reports_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.createdBy],
@@ -1420,7 +1420,7 @@ export const bankConnections = pgTable(
   (table) => [
     index("bank_connections_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId],
@@ -1468,7 +1468,7 @@ export const userInvites = pgTable(
   (table) => [
     index("user_invites_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId],
@@ -1557,17 +1557,17 @@ export const transactionTags = pgTable(
   (table) => [
     index("transaction_tags_tag_id_idx").using(
       "btree",
-      table.tagId.asc().nullsLast().op("uuid_ops"),
+      table.tagId.asc().nullsLast(),
     ),
     index("transaction_tags_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("transaction_tags_transaction_id_tag_id_team_id_idx").using(
       "btree",
-      table.transactionId.asc().nullsLast().op("uuid_ops"),
-      table.tagId.asc().nullsLast().op("uuid_ops"),
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.transactionId.asc().nullsLast(),
+      table.tagId.asc().nullsLast(),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.tagId],
@@ -1612,11 +1612,11 @@ export const transactionAttachments = pgTable(
   (table) => [
     index("transaction_attachments_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("transaction_attachments_transaction_id_idx").using(
       "btree",
-      table.transactionId.asc().nullsLast().op("uuid_ops"),
+      table.transactionId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId],
@@ -1749,49 +1749,49 @@ export const documents = pgTable(
   (table) => [
     index("documents_name_idx").using(
       "btree",
-      table.name.asc().nullsLast().op("text_ops"),
+      table.name.asc().nullsLast(),
     ),
     index("documents_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("documents_team_id_parent_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("text_ops"),
-      table.parentId.asc().nullsLast().op("text_ops"),
+      table.teamId.asc().nullsLast(),
+      table.parentId.asc().nullsLast(),
     ),
     // Composite index for common query pattern: teamId + createdAt DESC
     // Used by getDocuments and getRecentDocuments
     index("documents_team_id_created_at_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
       table.createdAt.desc().nullsLast(),
     ),
     // Composite index for date range queries
     // Used by getDocuments when filtering by date range
     index("documents_team_id_date_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
       table.date.asc().nullsLast(),
     ),
     // Composite index for teamId + name queries
     // Used by getDocumentById, updateDocumentByFileName, updateDocuments
     index("documents_team_id_name_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
-      table.name.asc().nullsLast().op("text_ops"),
+      table.teamId.asc().nullsLast(),
+      table.name.asc().nullsLast(),
     ),
     index("idx_documents_fts_english").using(
       "gin",
-      table.ftsEnglish.asc().nullsLast().op("tsvector_ops"),
+      table.ftsEnglish.asc().nullsLast(),
     ),
     index("idx_documents_fts_language").using(
       "gin",
-      table.ftsLanguage.asc().nullsLast().op("tsvector_ops"),
+      table.ftsLanguage.asc().nullsLast(),
     ),
     index("idx_documents_fts_simple").using(
       "gin",
-      table.ftsSimple.asc().nullsLast().op("tsvector_ops"),
+      table.ftsSimple.asc().nullsLast(),
     ),
     index("idx_gin_documents_title").using(
       "gin",
@@ -2291,8 +2291,8 @@ export const transactionEnrichments = pgTable(
   (table) => [
     index("transaction_enrichments_category_slug_team_id_idx").using(
       "btree",
-      table.categorySlug.asc().nullsLast().op("text_ops"),
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.categorySlug.asc().nullsLast(),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId, table.categorySlug],
@@ -2344,7 +2344,7 @@ export const users = pgTable(
   (table) => [
     index("users_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.id],
@@ -2413,11 +2413,11 @@ export const trackerProjects = pgTable(
   (table) => [
     index("tracker_projects_fts").using(
       "gin",
-      table.fts.asc().nullsLast().op("tsvector_ops"),
+      table.fts.asc().nullsLast(),
     ),
     index("tracker_projects_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.customerId],
@@ -2498,31 +2498,31 @@ export const inbox = pgTable(
   (table) => [
     index("inbox_attachment_id_idx").using(
       "btree",
-      table.attachmentId.asc().nullsLast().op("uuid_ops"),
+      table.attachmentId.asc().nullsLast(),
     ),
     index("inbox_created_at_idx").using(
       "btree",
-      table.createdAt.asc().nullsLast().op("timestamptz_ops"),
+      table.createdAt.asc().nullsLast(),
     ),
     index("inbox_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("inbox_transaction_id_idx").using(
       "btree",
-      table.transactionId.asc().nullsLast().op("uuid_ops"),
+      table.transactionId.asc().nullsLast(),
     ),
     index("inbox_inbox_account_id_idx").using(
       "btree",
-      table.inboxAccountId.asc().nullsLast().op("uuid_ops"),
+      table.inboxAccountId.asc().nullsLast(),
     ),
     index("inbox_invoice_number_idx").using(
       "btree",
-      table.invoiceNumber.asc().nullsLast().op("text_ops"),
+      table.invoiceNumber.asc().nullsLast(),
     ),
     index("inbox_grouped_inbox_id_idx").using(
       "btree",
-      table.groupedInboxId.asc().nullsLast().op("uuid_ops"),
+      table.groupedInboxId.asc().nullsLast(),
     ),
     index("idx_inbox_display_name_trgm").using(
       "gin",
@@ -2660,19 +2660,19 @@ export const transactionMatchSuggestions = pgTable(
   (table) => [
     index("transaction_match_suggestions_inbox_id_idx").using(
       "btree",
-      table.inboxId.asc().nullsLast().op("uuid_ops"),
+      table.inboxId.asc().nullsLast(),
     ),
     index("transaction_match_suggestions_transaction_id_idx").using(
       "btree",
-      table.transactionId.asc().nullsLast().op("uuid_ops"),
+      table.transactionId.asc().nullsLast(),
     ),
     index("transaction_match_suggestions_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("transaction_match_suggestions_status_idx").using(
       "btree",
-      table.status.asc().nullsLast().op("text_ops"),
+      table.status.asc().nullsLast(),
     ),
     index("transaction_match_suggestions_confidence_idx").using(
       "btree",
@@ -2680,14 +2680,14 @@ export const transactionMatchSuggestions = pgTable(
     ),
     index("transaction_match_suggestions_lookup_idx").using(
       "btree",
-      table.transactionId.asc().nullsLast().op("uuid_ops"),
-      table.teamId.asc().nullsLast().op("uuid_ops"),
-      table.status.asc().nullsLast().op("text_ops"),
+      table.transactionId.asc().nullsLast(),
+      table.teamId.asc().nullsLast(),
+      table.status.asc().nullsLast(),
     ),
     index("transaction_match_suggestions_team_status_created_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
-      table.status.asc().nullsLast().op("text_ops"),
+      table.teamId.asc().nullsLast(),
+      table.status.asc().nullsLast(),
       table.createdAt.desc().nullsLast(),
     ),
     foreignKey({
@@ -2727,11 +2727,11 @@ export const documentTagAssignments = pgTable(
   (table) => [
     index("idx_document_tag_assignments_document_id").using(
       "btree",
-      table.documentId.asc().nullsLast().op("uuid_ops"),
+      table.documentId.asc().nullsLast(),
     ),
     index("idx_document_tag_assignments_tag_id").using(
       "btree",
-      table.tagId.asc().nullsLast().op("uuid_ops"),
+      table.tagId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.documentId],
@@ -2777,11 +2777,11 @@ export const usersOnTeam = pgTable(
   (table) => [
     index("users_on_team_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("users_on_team_user_id_idx").using(
       "btree",
-      table.userId.asc().nullsLast().op("uuid_ops"),
+      table.userId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId],
@@ -2835,7 +2835,7 @@ export const transactionCategories = pgTable(
       mode: "string",
     }).defaultNow(),
     system: boolean().default(false),
-    slug: text(), // Generated in database
+    slug: text().notNull(), // Generated in database
     taxRate: numericCasted("tax_rate", { precision: 10, scale: 2 }),
     taxType: text("tax_type"),
     taxReportingCode: text("tax_reporting_code"),
@@ -2846,11 +2846,11 @@ export const transactionCategories = pgTable(
   (table) => [
     index("transaction_categories_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("transaction_categories_parent_id_idx").using(
       "btree",
-      table.parentId.asc().nullsLast().op("uuid_ops"),
+      table.parentId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId],
@@ -2979,15 +2979,15 @@ export const shortLinks = pgTable(
   (table) => [
     index("short_links_short_id_idx").using(
       "btree",
-      table.shortId.asc().nullsLast().op("text_ops"),
+      table.shortId.asc().nullsLast(),
     ),
     index("short_links_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("short_links_user_id_idx").using(
       "btree",
-      table.userId.asc().nullsLast().op("uuid_ops"),
+      table.userId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.userId],
@@ -3048,15 +3048,15 @@ export const apiKeys = pgTable(
   (table) => [
     index("api_keys_key_idx").using(
       "btree",
-      table.keyHash.asc().nullsLast().op("text_ops"),
+      table.keyHash.asc().nullsLast(),
     ),
     index("api_keys_user_id_idx").using(
       "btree",
-      table.userId.asc().nullsLast().op("uuid_ops"),
+      table.userId.asc().nullsLast(),
     ),
     index("api_keys_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.userId],
@@ -3108,15 +3108,15 @@ export const oauthApplications = pgTable(
   (table) => [
     index("oauth_applications_team_id_idx").using(
       "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops"),
+      table.teamId.asc().nullsLast(),
     ),
     index("oauth_applications_client_id_idx").using(
       "btree",
-      table.clientId.asc().nullsLast().op("text_ops"),
+      table.clientId.asc().nullsLast(),
     ),
     index("oauth_applications_slug_idx").using(
       "btree",
-      table.slug.asc().nullsLast().op("text_ops"),
+      table.slug.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.teamId],
@@ -3162,15 +3162,15 @@ export const oauthAuthorizationCodes = pgTable(
   (table) => [
     index("oauth_authorization_codes_code_idx").using(
       "btree",
-      table.code.asc().nullsLast().op("text_ops"),
+      table.code.asc().nullsLast(),
     ),
     index("oauth_authorization_codes_application_id_idx").using(
       "btree",
-      table.applicationId.asc().nullsLast().op("uuid_ops"),
+      table.applicationId.asc().nullsLast(),
     ),
     index("oauth_authorization_codes_user_id_idx").using(
       "btree",
-      table.userId.asc().nullsLast().op("uuid_ops"),
+      table.userId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.applicationId],
@@ -3222,19 +3222,19 @@ export const oauthAccessTokens = pgTable(
   (table) => [
     index("oauth_access_tokens_token_idx").using(
       "btree",
-      table.token.asc().nullsLast().op("text_ops"),
+      table.token.asc().nullsLast(),
     ),
     index("oauth_access_tokens_refresh_token_idx").using(
       "btree",
-      table.refreshToken.asc().nullsLast().op("text_ops"),
+      table.refreshToken.asc().nullsLast(),
     ),
     index("oauth_access_tokens_application_id_idx").using(
       "btree",
-      table.applicationId.asc().nullsLast().op("uuid_ops"),
+      table.applicationId.asc().nullsLast(),
     ),
     index("oauth_access_tokens_user_id_idx").using(
       "btree",
-      table.userId.asc().nullsLast().op("uuid_ops"),
+      table.userId.asc().nullsLast(),
     ),
     foreignKey({
       columns: [table.applicationId],
